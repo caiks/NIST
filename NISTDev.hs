@@ -99,33 +99,40 @@ decomperIO uu vv hh wmax lmax xmax omax bmax mmax umax pmax fmax mult seed =
       parametersSystemsHistoryRepasDecomperMaxRollByMExcludedSelfHighestFmaxIORepa 
         wmax lmax xmax omax bmax mmax umax pmax fmax mult seed uu vv hh
 
-nistTrainIO :: IO (System, HistoryRepa)
-nistTrainIO = 
+nistTrainBucketedIO :: Int -> IO (System, HistoryRepa)
+nistTrainBucketedIO d = 
     do
       let z = 60000 :: Int
       lz <- BL.readFile "./train-labels-idx1-ubyte.gz"
       let l = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int
       pz <- BL.readFile "./train-images-idx3-ubyte.gz"
       let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (28*28)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int
-      let h = (R.computeS $ l R.++ p) :: R.Array R.U R.DIM2 Int
-      let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0..255]]) | x <- [1..28], y <- [1..28]]
+      let r = R.map (\x -> x * d `div` 256) p
+      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int
+      let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0 .. (toInteger (d-1))]]) | x <- [1..28], y <- [1..28]]
       let vv = qqll (uvars uu)
-      let svv = (UV.fromList $ [10] ++ replicate (28*28) 256) :: VShape
+      let svv = (UV.fromList $ [10] ++ replicate (28*28) d) :: VShape
       let hr = HistoryRepa (V.fromListN (28*28+1) vv) (Map.fromList (zip vv [0..])) svv $ R.computeS $ R.transpose h
       return (uu,hr)
 
-nistTestIO :: IO (System, HistoryRepa)
-nistTestIO = 
+nistTrainIO = nistTrainBucketedIO 256
+
+nistTestBucketedIO :: Int -> IO (System, HistoryRepa)
+nistTestBucketedIO d = 
     do
       let z = 10000 :: Int
       lz <- BL.readFile "./t10k-labels-idx1-ubyte.gz"
       let l = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int
       pz <- BL.readFile "./t10k-images-idx3-ubyte.gz"
       let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (28*28)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int
-      let h = (R.computeS $ l R.++ p) :: R.Array R.U R.DIM2 Int
-      let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0..255]]) | x <- [1..28], y <- [1..28]]
+      let r = R.map (\x -> x * d `div` 256) p
+      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int
+      let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0 .. (toInteger (d-1))]]) | x <- [1..28], y <- [1..28]]
       let vv = qqll (uvars uu)
-      let svv = (UV.fromList $ [10] ++ replicate (28*28) 256) :: VShape
+      let svv = (UV.fromList $ [10] ++ replicate (28*28) d) :: VShape
       let hr = HistoryRepa (V.fromListN (28*28+1) vv) (Map.fromList (zip vv [0..])) svv $ R.computeS $ R.transpose h
       return (uu,hr)
+
+nistTestIO = nistTestBucketedIO 256
+
 
