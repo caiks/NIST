@@ -17,6 +17,14 @@ git clone https://github.com/caiks/Alignment.git
 git clone https://github.com/caiks/AlignmentRepa.git
 git clone https://github.com/caiks/NIST.git
 ```
+Then download the dataset files, for example -
+```
+cd NIST
+wget http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+wget http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+wget http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+```
 
 ## Usage
 
