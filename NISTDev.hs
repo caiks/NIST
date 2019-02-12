@@ -43,26 +43,41 @@ import AlignmentPracticableRepa
 import AlignmentPracticableIORepa
 import AlignmentDevRepa hiding (aahr)
 
-bmempty sx sy = R.computeS $ R.fromFunction ((R.Z R.:. sx R.:. sy) :: R.DIM2) (const (0,0,0)) :: R.Array R.U R.DIM2 (Word8, Word8, Word8)
+bmempty sx sy = R.fromFunction ((R.Z R.:. sx R.:. sy) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
 
-bminsert bm2 ox oy bm1 = bm :: R.Array R.U R.DIM2 (Word8, Word8, Word8)
+bminsert bm2 ox oy bm1 = bm
   where
-    bm = R.computeS $ R.traverse2 bm2 bm1 (\_ _ -> R.extent bm2) ins
+    bm = R.traverse2 bm2 bm1 (\_ _ -> R.extent bm2) ins
     (R.Z R.:. sx R.:. sy) = R.extent bm1
     ins f1 f2 (R.Z R.:. x R.:. y) = 
       if (x>=ox && x<ox+sx && y>=oy && y<oy+sy) 
         then (f2 (R.Z R.:. (x-ox) R.:. (y-oy))) 
         else (f1 (R.Z R.:. x R.:. y))
 
+bmmax bm2 ox oy bm1 = bm
+  where
+    bm = R.traverse2 bm2 bm1 (\_ _ -> R.extent bm2) ins
+    (R.Z R.:. sx R.:. sy) = R.extent bm1
+    ins f1 f2 (R.Z R.:. x R.:. y) = 
+      if (x>=ox && x<ox+sx && y>=oy && y<oy+sy) 
+        then max (f1 (R.Z R.:. x R.:. y)) (f2 (R.Z R.:. (x-ox) R.:. (y-oy))) 
+        else (f1 (R.Z R.:. x R.:. y))
+
 bmborder b bm = bminsert bm2 1 1 bm 
   where
-    bm2 = R.computeS $ R.fromFunction ((R.Z R.:. (b+2) R.:. (b+2)) :: R.DIM2) ins :: R.Array R.U R.DIM2 (Word8, Word8, Word8)
+    bm2 = R.fromFunction ((R.Z R.:. (b+2) R.:. (b+2)) :: R.DIM2) ins
     ins (R.Z R.:. x R.:. y) = 
       if (x==0 || x==b+1 || y==0 || y==b+1) 
         then (255,255,255) 
         else (0,0,0)
 
-hrbm a b c q d hr = bminsert bm2 q q bm1 :: R.Array R.U R.DIM2 (Word8, Word8, Word8)
+bmhstack ll = foldl1 R.append ll
+
+bmvstack ll = R.transpose $ foldl1 R.append $ map R.transpose ll
+
+bmwrite f bm = writeImageToBMP f $ R.computeS (bm :: R.Array R.D R.DIM2 (Word8, Word8, Word8))
+
+hrbm a b c q d hr = bminsert bm2 q q bm1
   where
     z = hrsize hr
     ar1 = R.sumS $ historyRepasArray hr
@@ -72,24 +87,8 @@ hrbm a b c q d hr = bminsert bm2 q q bm1 :: R.Array R.U R.DIM2 (Word8, Word8, Wo
     flip (R.Z R.:. x R.:. y) = (R.Z R.:. (b-1-x) R.:. y)
     ar5 = R.backpermute ((R.Z R.:. (b*c) R.:. (b*c)) :: R.DIM2) expand ar4
     expand  (R.Z R.:. x R.:. y) = (R.Z R.:. (x`div`c) R.:. (y`div`c))
-    bm1 = R.computeS $ R.map (\x -> let y = fromInteger (toInteger x) in (y,y,y)) ar5 :: R.Array R.U R.DIM2 (Word8, Word8, Word8)
-    bm2 = R.computeS $ R.fromFunction ((R.Z R.:. a R.:. a) :: R.DIM2) (const (0,0,0)) :: R.Array R.U R.DIM2 (Word8, Word8, Word8)
-
-hrllbmh a b c q d ll hh = bm
-  where
-    vvk = Set.fromList [VarPair (VarInt (toInteger i),VarInt (toInteger j)) | i <- [1..b], j <- [1..b]]
-    lla = zip [0..] [hrev [i] hh | i <- ll]
-    sy = (length ll) * (a+1) + 1
-    sx = a + 2
-    bm = foldl (\bm2 (x,hr) -> bminsert bm2 0 (x * (a+1)) (bmborder a (hrbm a b c q d (hr `hrhrred` vvk)))) (bmempty sx sy) lla
-
-hrllbmv a b c q d ll hh = bm
-  where
-    vvk = Set.fromList [VarPair (VarInt (toInteger i),VarInt (toInteger j)) | i <- [1..b], j <- [1..b]]
-    lla = zip [0..] [hrev [i] hh | i <- ll]
-    sx = (length ll) * (a+1) + 1
-    sy = a + 2
-    bm = foldl (\bm2 (x,hr) -> bminsert bm2 (sx - ((x+1) * (a+1) + 1)) 0 (bmborder a (hrbm a b c q d (hr `hrhrred` vvk)))) (bmempty sx sy) lla
+    bm1 = R.map (\x -> let y = fromInteger (toInteger x) in (y,y,y)) ar5
+    bm2 = R.fromFunction ((R.Z R.:. a R.:. a) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
 
 lluu ll = fromJust $ listsSystem [(v, llqq ww) | (v,ww) <- ll]
 
