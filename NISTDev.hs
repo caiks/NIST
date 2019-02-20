@@ -73,7 +73,7 @@ bmborder b bm = bminsert bm2 1 1 bm
 
 bmhstack ll = foldl1 R.append ll
 
-bmvstack ll = R.transpose $ foldl1 R.append $ map R.transpose ll
+bmvstack ll = R.transpose $ foldl1 R.append $ map R.transpose $ reverse ll
 
 bmwrite f bm = writeImageToBMP f $ R.computeS (bm :: R.Array R.D R.DIM2 (Word8, Word8, Word8))
 
