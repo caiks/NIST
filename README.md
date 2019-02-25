@@ -81,62 +81,27 @@ ghci -i../Alignment -i../AlignmentRepa ../AlignmentRepa/AlignmentForeign.o
 ```hs
 :l NISTDev
 
-csvtr <- BL.readFile "train.csv"
-let vvcsvtr = either (\_ -> V.empty) id (Data.Csv.decode HasHeader csvtr :: Either String (V.Vector Train))
-let aatr = llaa [(llss [(VarStr s, fw rr) | (s,fw) <- trmap],1) | rr <- V.toList vvcsvtr]
+(uu,hrtr) <- nistTrainBucketedIO 2
 
-csvte <- BL.readFile "test.csv"
-let vvcsvte = either (\_ -> V.empty) id (Data.Csv.decode HasHeader csvte :: Either String (V.Vector Test))
-let aate = llaa [(llss [(VarStr s, fw rr) | (s,fw) <- temap],1) | rr <- V.toList vvcsvte]
-
-let uu = sys aatr `uunion` sys aate
-let vv = uvars uu `minus` sgl (VarStr "Id")
-let vvl = sgl (VarStr "SalePrice")
+let digit = VarStr "digit"
+let vv = uvars uu
+let vvl = sgl digit
 let vvk = vv `minus` vvl
 
-let aa = (aatr `red` vvk) `add` (aate `red` vvk)
+let hr = hrev [i | i <- [0.. hrsize hrtr - 1], i `mod` 8 == 0] hrtr 
 
-size aa
+hrsize hr
 
-let vvo = llqq [w | w <- qqll vv, isOrd uu w, let u = vol uu (sgl w), u > 16]
+let hrtr = undefined
 
-let vvoz = llqq [w | w <- qqll vv, isOrd uu w, let u = vol uu (sgl w), u > 16, let rr = unit (sgl (llss [(w, ValInt 0)])), let bb = aatr `red` sgl w `mul` rr, size bb > 100]
+let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^10, 8, 2^10, 10, (10*3), 3, 2^8, 1, 15, 1, 5)
 
-let xx = Map.fromList $ map (\(v,ww) -> let VarStr s = v in (v, (VarStr (s ++ "B"), ww))) $ [(v, bucket 20 aa v) | v <- qqll (vvo `minus` vvoz)] ++ [(VarStr "SalePrice", bucket 20 aatr (VarStr "SalePrice"))] ++ [(v, bucket 20 aa' v) | v <- qqll vvoz, let rr = unit (sgl (llss [(v, ValInt 0)])), let bb = aa `red` sgl v `mul` rr, let aa' = trim (aa `red` sgl v `sub` bb)]
+Just (uu1,df) <- decomperIO uu vvk hr wmax lmax xmax omax bmax mmax umax pmax fmax mult seed
 
-let aab = reframeb aa xx
+summation mult seed uu1 df hr
+(145211.97758613623,72018.94728089121)
 
-size aab
-
-let aatrb = reframeb aatr xx
-
-size aatrb
-
-let aateb = reframeb aate xx
-
-size aateb
-
-let uub = sys aab `uunion` sys aatrb `uunion` sys aateb
-let vvb = uvars uub `minus` sgl (VarStr "Id")
-let vvbl = sgl (VarStr "SalePriceB")
-let vvbk = vvb `minus` vvbl
-
-let hhb = aahr uub aab `hrhrred` vvbk
-
-hrsize hhb
-
-let summation = systemsDecompFudsHistoryRepasAlignmentContentShuffleSummation_u
-
-let sumtree = systemsDecompFudsHistoryRepasTreeAlignmentContentShuffleSummation_u
-
-let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (1460, 8, 1460, 10, (10*3), 4, 1460, 1, 10, 3, 5)
-
-Just (uub',dfb') <- decomperIO uub vvbk hhb wmax lmax xmax omax bmax mmax umax pmax fmax mult seed
-
-summation mult seed uub' dfb' hhb
-(19003.657461612253,8264.069987311002)
-
-BL.writeFile ("df1.json") $ decompFudsPersistentsEncode $ decompFudsPersistent dfb'
+BL.writeFile ("NIST_model1.json") $ decompFudsPersistentsEncode $ decompFudsPersistent df
 
 ```
 
