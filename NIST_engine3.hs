@@ -49,9 +49,9 @@ main =
     printf ">>>\n"
     hFlush stdout
 
-    (uu,hrtr) <- nistTrainBucketedIO 2
+    (uu,hr) <- nistTrainBucketedIO 2
 
-    printf "train size: %d\n" $ hrsize hrtr
+    printf "train size: %d\n" $ hrsize hr
     hFlush stdout
 
     let digit = VarStr "digit"
@@ -60,10 +60,10 @@ main =
     let vvk = vv `minus` vvl
 
     let model = "NIST_model3"
-    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^11, 40, (40*5), 5, 2^8, 1, 127, 1, 5)
+    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^11, 40, (40*4), 4, 2^8, 1, 127, 1, 5)
 
     printf ">>> %s\n" $ model
-    Just (uu1,df) <- decomperIO uu vvk hrtr wmax lmax xmax omax bmax mmax umax pmax fmax mult seed
+    Just (uu1,df) <- decomperIO uu vvk hr wmax lmax xmax omax bmax mmax umax pmax fmax mult seed
     BL.writeFile (model ++ ".json") $ decompFudsPersistentsEncode $ decompFudsPersistent df
     printf "<<< done %s\n" $ model
     hFlush stdout
