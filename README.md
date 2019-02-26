@@ -28,9 +28,9 @@ wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
 
 ## Usage
 
-The *practicable model induction* is described [here](https://greenlake.co.uk/pages/dataset_NIST_model1).
+The *practicable model induction* is described [here](https://greenlake.co.uk/pages/dataset_NIST_model3).
 
-`NIST_engine1` runs on a Ubuntu 16.04 Pentium CPU G2030 @ 3.00GHz using 1883 MB total memory and takes 6454 seconds,
+`NIST_engine3` runs on a Ubuntu 16.04 Pentium CPU G2030 @ 3.00GHz using 1883 MB total memory and takes 6454 seconds,
 
 ```
 cd ../Alignment
@@ -44,14 +44,13 @@ gcc -fPIC -c AlignmentForeign.c -o AlignmentForeign.o -O3
 cd ../NIST
 rm *.o *.hi
 
-ghc -i../Alignment -i../AlignmentRepa ../AlignmentRepa/AlignmentForeign.o NIST_engine1.hs -o NIST_engine1.exe -rtsopts -O2
+ghc -i../Alignment -i../AlignmentRepa ../AlignmentRepa/AlignmentForeign.o NIST_engine3.hs -o NIST_engine3.exe -rtsopts -O2
 
-./NIST_engine1.exe +RTS -s >NIST_engine1.log 2>&1 &
+./NIST_engine3.exe +RTS -s >NIST_engine3.log 2>&1 &
 
-tail -f NIST_engine1.log
+tail -f NIST_engine3.log
 
 ```
-
 To experiment with the dataset in the interpreter,
 ```
 cd ../Alignment
