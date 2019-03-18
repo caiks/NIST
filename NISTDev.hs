@@ -116,6 +116,22 @@ nistTrainBucketedIO d =
 
 nistTrainIO = nistTrainBucketedIO 256
 
+nistTrainBucketedRegionRandomIO :: Int -> Int -> Int -> Int -> IO (System, HistoryRepa)
+nistTrainBucketedRegionRandomIO d b n s = 
+    do
+      let a = 28 :: Int
+      let z = 60000 :: Int
+      pz <- BL.readFile "./train-images-idx3-ubyte.gz"
+      let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (a*a)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int
+      let vr = UV.fromListN (z*n) $ zip (randomRs (0,a-b) (mkStdGen s) :: [Int]) (randomRs (0,a-b) (mkStdGen (s+1234567)) :: [Int])
+      let r = R.reshape ((R.Z R.:. (n*z) R.:. (b*b)) :: R.DIM2)  $ R.backpermute ((R.Z R.:. n R.:. z R.:. b R.:. b) :: R.DIM4) ((\(R.Z R.:. ni R.:. zi R.:. x R.:. y) -> let (x1,y1) = vr UV.! (zi*n+ni) in (R.Z R.:. zi R.:. x1+x R.:. y1+y)) :: R.DIM4 -> R.DIM3) $ R.reshape ((R.Z R.:. z R.:. a R.:. a) :: R.DIM3) $ R.map (\x -> x * d `div` 256) p
+      let h = (R.computeS $ r) :: R.Array R.U R.DIM2 Int
+      let uu = lluu $ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0 .. (toInteger (d-1))]]) | x <- [1..toInteger b], y <- [1..toInteger b]]
+      let vv = qqll (uvars uu)
+      let svv = (UV.fromList $ replicate (b*b) d) :: VShape
+      let hr = HistoryRepa (V.fromListN (b*b) vv) (Map.fromList (zip vv [0..])) svv $ R.computeS $ R.transpose h
+      return (uu,hr)
+
 nistTestBucketedIO :: Int -> IO (System, HistoryRepa)
 nistTestBucketedIO d = 
     do
