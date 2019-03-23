@@ -112,7 +112,6 @@ main =
     let df2' = zzdf $ funcsTreesMap (\(ss,ff) -> (ss, (ff `funion` gg1) `fdep` fder ff)) $ dfzz df2
 
     BL.writeFile (model ++ ".json") $ decompFudsPersistentsEncode $ decompFudsPersistent df2'
-    printf "<<< done %s\n" $ model
     hFlush stdout
 
     printf "decomp size: %d\n" $ (Set.size $ fvars $ dfff df2')
