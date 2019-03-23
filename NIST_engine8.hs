@@ -100,7 +100,7 @@ main =
     printf "sys cardinality: %d\n" $ card $ uvars uu1
     hFlush stdout
 
-    let hr1 = hrfmul uu1 gg1 hr
+    let hr1 = hrfmul uu1 gg1 hr `hrhrred` (fder gg1 `union` vvl)
 
     printf "hr1 size: %d\n" $ hrsize hr1
     hFlush stdout
