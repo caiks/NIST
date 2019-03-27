@@ -41,16 +41,17 @@ import AlignmentAesonRepa
 import AlignmentRandomRepa
 import AlignmentPracticableRepa
 import AlignmentPracticableIORepa
-import AlignmentDevRepa hiding (aahr, tframe, qqff, funion, hrfmul)
+import AlignmentDevRepa
 import NISTDev
-
-hrfmul = systemsFudsHistoryRepasMultiply_u
 
 amax = llaa . take 1 . reverse . map (\(a,b) -> (b,a)) . sort . map (\(a,b) -> (b,a)) . aall . norm . trim
 
 main :: IO ()
 main = 
   do
+    printf ">>>\n"
+    hFlush stdout
+ 
     [model] <- getArgs
 
     printf "model: %s\n" $ model
@@ -60,7 +61,7 @@ main =
 
     let hr = hrev [i | i <- [0.. hrsize hrtr - 1], i `mod` 8 == 0] hrtr 
 
-    printf "train size: %d\n" $ hrsize hr
+    printf "selected train size: %d\n" $ hrsize hr
     hFlush stdout
 
     let hrtr = undefined
@@ -71,34 +72,29 @@ main =
     let vvk = vv `minus` vvl
 
     s <- BL.readFile (model ++ ".json")
-    let df = fromJust $ persistentsDecompFud $ fromJust $ (Data.Aeson.decode s :: Maybe DecompFudPersistent)
+    let df1 = fromJust $ persistentsDecompFud $ fromJust $ (Data.Aeson.decode s :: Maybe DecompFudPersistent)
 
-    printf "df cardinality: %d\n" $ card $ fvars $ dfff df
+    printf "model cardinality: %d\n" $ card $ fvars $ dfff df1
     hFlush stdout
 
-    let uu1 = uu `uunion` (fsys (dfff df))
+    let uu1 = uu `uunion` (fsys (dfff df1))
 
-    bmwrite "NIST.bmp" $ bmvstack $ map (\bm -> bminsert (bmempty ((28*1)+2) (((28*1)+2)*9)) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder (28*1) (hrbm (28*1) 28 1 0 2 (hrs `hrhrred` vvk)))) $ qqll $ treesPaths $ hrmult uu1 df hr
+    let ff1 = fromJust $ systemsDecompFudsNullablePracticable uu1 df1 9
 
-    let ff = fromJust $ systemsDecompFudsNullablePracticable uu1 df 2
-
-    printf "ff cardinality: %d\n" $ card $ fvars $ ff
+    printf "nullable fud cardinality: %d\n" $ card $ fvars $ ff1
     hFlush stdout
 
-    printf "ff derived cardinality: %d\n" $ card $ fder $ ff
+    printf "nullable fud derived cardinality: %d\n" $ card $ fder $ ff1
     hFlush stdout
 
-    printf "ff underlying cardinality: %d\n" $ card $ fund $ ff
+    printf "nullable fud underlying cardinality: %d\n" $ card $ fund $ ff1
     hFlush stdout
 
-    let uu2 = uu `uunion` (fsys ff)
+    let uu1 = uu `uunion` (fsys ff1)
 
-    let hrb = hrfmul uu2 ff hr
+    let hr1 = hrfmul uu1 ff1 hr
 
-    printf "train multiplied size: %d\n" $ hrsize hrb
-    hFlush stdout
-
-    printf "ff label ent: %.20f\n" $ hrlent uu2 hrb (fder ff) vvl
+    printf "ff label ent: %.16f\n" $ hrlent uu1 hr1 (fder ff1) vvl
     hFlush stdout
 
     (uu,hrte) <- nistTestBucketedIO 2
@@ -110,17 +106,15 @@ main =
 
     let hrte = undefined
 
-    let hrqb = hrfmul uu2 ff hrq
+    let hrq1 = hrfmul uu1 ff1 hrq
 
-    printf "test multiplied size: %d\n" $ hrsize hrqb
+    printf "effective size: %s\n" $ rp $ size $ hhaa (hrhh uu1 (hrq1 `hrhrred` (fder ff1))) `mul` eff (hhaa (hrhh uu1 (hr1 `hrhrred` (fder ff1))))
     hFlush stdout
 
-    printf "effective size: %s\n" $ rp $ size $ hhaa (hrhh uu2 (hrqb `hrhrred` (fder ff))) `mul` eff (hhaa (hrhh uu2 (hrb `hrhrred` (fder ff))))
+    printf "matches: %d\n" $ length [rr | let hhq = hrhh uu1 (hrq1 `hrhrred` (fder ff1 `union` vvl)), let aa = hhaa (hrhh uu1 (hr1 `hrhrred` (fder ff1 `union` vvl))), (_,ss) <- hhll hhq, let qq = single ss 1, let rr = aa `mul` (qq `red` fder ff1) `red` vvl, size rr > 0, size (amax rr `mul` (qq `red` vvl)) > 0]
     hFlush stdout
 
-    printf "matches: %d\n" $ length [rr | let hhq = hrhh uu2 (hrqb `hrhrred` (fder ff `union` vvl)), let aa = hhaa (hrhh uu2 (hrb `hrhrred` (fder ff `union` vvl))), (_,ss) <- hhll hhq, let qq = single ss 1, let rr = aa `mul` (qq `red` fder ff) `red` vvl, size rr > 0, size (amax rr `mul` (qq `red` vvl)) > 0]
-    hFlush stdout
+    printf "<<< done\n"
 
-    printf "done\n"
 
 
