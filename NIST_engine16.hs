@@ -117,7 +117,7 @@ main =
 
     printf ">>> %s\n" $ model
     hFlush stdout
-    let (uu2,df2) = decompercondrr vvl uu1 hr1 kmax omax 1023
+    let (uu2,df2) = decompercondrr vvl uu1 hr1 kmax omax 511
     let df2' = zzdf $ funcsTreesMap (\(ss,ff) -> (ss, (ff `funion` gg1) `fdep` fder ff)) $ dfzz df2
     BL.writeFile (model ++ ".json") $ decompFudsPersistentsEncode $ decompFudsPersistent df2'
     printf "<<< done %s\n" $ model
