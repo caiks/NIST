@@ -181,4 +181,9 @@ nistTestBucketedIO d =
 
 nistTestIO = nistTestBucketedIO 256
 
+dfIO f = 
+    do
+      s <- BL.readFile f
+      return $ fromJust $ persistentsDecompFud $ fromJust $ (Data.Aeson.decode s :: Maybe DecompFudPersistent)
+
 
