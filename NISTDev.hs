@@ -43,7 +43,9 @@ import AlignmentPracticableRepa
 import AlignmentPracticableIORepa
 import AlignmentDevRepa hiding (aahr)
 
-bmempty sx sy = R.fromFunction ((R.Z R.:. sx R.:. sy) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
+bmempty sx sy = R.fromFunction ((R.Z R.:. sx R.:. sy) :: R.DIM2) (const (0 :: Word8, 0 :: Word8, 0 :: Word8))
+
+bmfull sx sy = R.fromFunction ((R.Z R.:. sx R.:. sy) :: R.DIM2) (const (255 :: Word8, 255 :: Word8, 255 :: Word8))
 
 bminsert bm2 ox oy bm1 = bm
   where
@@ -63,13 +65,9 @@ bmmax bm2 ox oy bm1 = bm
         then max (f1 (R.Z R.:. x R.:. y)) (f2 (R.Z R.:. (x-ox) R.:. (y-oy))) 
         else (f1 (R.Z R.:. x R.:. y))
 
-bmborder b bm = bminsert bm2 1 1 bm 
+bmborder b bm = bminsert (bmfull (b*2+sx) (b*2+sy)) b b bm
   where
-    bm2 = R.fromFunction ((R.Z R.:. (b+2) R.:. (b+2)) :: R.DIM2) ins
-    ins (R.Z R.:. x R.:. y) = 
-      if (x==0 || x==b+1 || y==0 || y==b+1) 
-        then (255,255,255) 
-        else (0,0,0)
+    (R.Z R.:. sx R.:. sy) = R.extent bm
 
 bmhstack ll = foldl1 R.append ll
 
