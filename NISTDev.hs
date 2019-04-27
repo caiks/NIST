@@ -75,7 +75,7 @@ bmvstack ll = R.transpose $ foldl1 R.append $ map R.transpose $ reverse ll
 
 bmwrite f bm = writeImageToBMP f $ R.computeS (bm :: R.Array R.D R.DIM2 (Word8, Word8, Word8))
 
-hrbm a b c q d hr = bminsert bm2 q q bm1
+hrbm b c d hr = bminsert bm2 0 0 bm1
   where
     z = hrsize hr
     ar1 = R.sumS $ historyRepasArray hr
@@ -86,9 +86,9 @@ hrbm a b c q d hr = bminsert bm2 q q bm1
     ar5 = R.backpermute ((R.Z R.:. (b*c) R.:. (b*c)) :: R.DIM2) expand ar4
     expand  (R.Z R.:. x R.:. y) = (R.Z R.:. (x`div`c) R.:. (y`div`c))
     bm1 = R.map (\x -> let y = fromInteger (toInteger x) in (y,y,y)) ar5
-    bm2 = R.fromFunction ((R.Z R.:. a R.:. a) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
+    bm2 = R.fromFunction ((R.Z R.:. (b*c) R.:. (b*c)) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
 
-hrbmrow a b c q d hr = bminsert bm2 q 0 bm1
+hrbmrow b c d hr = bminsert bm2 ((b-c)`div`2) 0 bm1
   where
     z = hrsize hr
     ar1 = R.sumS $ historyRepasArray hr
@@ -96,23 +96,23 @@ hrbmrow a b c q d hr = bminsert bm2 q 0 bm1
     ar3 = R.reshape ((R.Z R.:. 1 R.:. b) :: R.DIM2) ar2
     ar4 = R.backpermute ((R.Z R.:. 1 R.:. b) :: R.DIM2) flip ar3
     flip (R.Z R.:. x R.:. y) = (R.Z R.:. 0 R.:. y)
-    ar5 = R.backpermute ((R.Z R.:. (1*c) R.:. (b*c)) :: R.DIM2) expand ar4
-    expand  (R.Z R.:. x R.:. y) = (R.Z R.:. 0 R.:. (y`div`c))
+    ar5 = R.backpermute ((R.Z R.:. c R.:. b) :: R.DIM2) expand ar4
+    expand  (R.Z R.:. x R.:. y) = (R.Z R.:. 0 R.:. y)
     bm1 = R.map (\x -> let y = fromInteger (toInteger x) in (y,y,y)) ar5
-    bm2 = R.fromFunction ((R.Z R.:. a R.:. a) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
+    bm2 = R.fromFunction ((R.Z R.:. b R.:. b) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
 
-hrbmcol a b c q d hr = bminsert bm2 0 q bm1
+hrbmcol b c d hr = bminsert bm2 0 ((b-c) `div` 2) bm1
   where
     z = hrsize hr
     ar1 = R.sumS $ historyRepasArray hr
-    ar2 = R.map (\x -> x * 255 `div` (d-1) `div` z) ar1
+    ar2 = R.map (\x -> x * 255 `div` (d-1)`div`z) ar1
     ar3 = R.reshape ((R.Z R.:. b R.:. 1) :: R.DIM2) ar2
     ar4 = R.backpermute ((R.Z R.:. b R.:. 1) :: R.DIM2) flip ar3
     flip (R.Z R.:. x R.:. y) = (R.Z R.:. (b-1-x) R.:. y)
-    ar5 = R.backpermute ((R.Z R.:. (b*c) R.:. (1*c)) :: R.DIM2) expand ar4
-    expand  (R.Z R.:. x R.:. y) = (R.Z R.:. (x`div`c) R.:. 0)
+    ar5 = R.backpermute ((R.Z R.:. b R.:. c) :: R.DIM2) expand ar4
+    expand  (R.Z R.:. x R.:. y) = (R.Z R.:. x R.:. 0)
     bm1 = R.map (\x -> let y = fromInteger (toInteger x) in (y,y,y)) ar5
-    bm2 = R.fromFunction ((R.Z R.:. a R.:. a) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
+    bm2 = R.fromFunction ((R.Z R.:. b R.:. b) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
 
 lluu ll = fromJust $ listsSystem [(v, llqq ww) | (v,ww) <- ll]
 
