@@ -112,7 +112,7 @@ main =
     printf "alignment density: %.2f\n" $ ad
     hFlush stdout
 -}
-    bmwrite (model ++ ".bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((11*3)+2) (((11*3)+2)*5)) 0 0 bm) $ map (bmhstack . map (\(_,hrs) -> bmborder (11*3) (hrbm (11*3) 11 3 0 2 (hrs `hrhrred` vvk)))) $ qqll $ treesPaths $ hrmult uu2 df2' hr'
+    bmwrite (model ++ ".bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((11*3)+2) (((11*3)+2)*5)) 0 0 bm) $ map (bmhstack . map (\(_,hrs) -> bmborder 1 (hrbm 11 3 2 (hrs `hrhrred` vvk)))) $ qqll $ treesPaths $ hrmult uu2 df2' hr'
     printf "bitmap %s\n" $ model ++ ".bmp"
     hFlush stdout
 
