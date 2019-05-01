@@ -6,6 +6,7 @@ where
 import Control.Monad
 import Control.Monad.ST
 import Data.STRef
+import Data.Int
 import Data.List hiding (union)
 import qualified Data.Set as Set
 import qualified Data.Map as Map
@@ -79,20 +80,20 @@ hrbm b c d hr = bminsert bm2 0 0 bm1
   where
     z = hrsize hr
     ar1 = R.sumS $ historyRepasArray hr
-    ar2 = R.map (\x -> x * 255 `div` (d-1) `div` z) ar1
+    ar2 = R.map (\x -> (fromIntegral x) * 255 `div` (d-1) `div` z) ar1
     ar3 = R.reshape ((R.Z R.:. b R.:. b) :: R.DIM2) ar2
     ar4 = R.backpermute ((R.Z R.:. b R.:. b) :: R.DIM2) flip ar3
     flip (R.Z R.:. x R.:. y) = (R.Z R.:. (b-1-x) R.:. y)
     ar5 = R.backpermute ((R.Z R.:. (b*c) R.:. (b*c)) :: R.DIM2) expand ar4
     expand  (R.Z R.:. x R.:. y) = (R.Z R.:. (x`div`c) R.:. (y`div`c))
-    bm1 = R.map (\x -> let y = fromInteger (toInteger x) in (y,y,y)) ar5
+    bm1 = R.map (\x -> let y = fromIntegral x in (y,y,y)) ar5
     bm2 = R.fromFunction ((R.Z R.:. (b*c) R.:. (b*c)) :: R.DIM2) (const (0 :: Word8,0 :: Word8,0 :: Word8))
 
 hrbmrow b c d hr = bminsert bm2 ((b-c)`div`2) 0 bm1
   where
     z = hrsize hr
     ar1 = R.sumS $ historyRepasArray hr
-    ar2 = R.map (\x -> x * 255 `div` (d-1) `div` z) ar1
+    ar2 = R.map (\x -> (fromIntegral x) * 255 `div` (d-1) `div` z) ar1
     ar3 = R.reshape ((R.Z R.:. 1 R.:. b) :: R.DIM2) ar2
     ar4 = R.backpermute ((R.Z R.:. 1 R.:. b) :: R.DIM2) flip ar3
     flip (R.Z R.:. x R.:. y) = (R.Z R.:. 0 R.:. y)
@@ -105,7 +106,7 @@ hrbmcol b c d hr = bminsert bm2 0 ((b-c) `div` 2) bm1
   where
     z = hrsize hr
     ar1 = R.sumS $ historyRepasArray hr
-    ar2 = R.map (\x -> x * 255 `div` (d-1)`div`z) ar1
+    ar2 = R.map (\x -> (fromIntegral x) * 255 `div` (d-1)`div`z) ar1
     ar3 = R.reshape ((R.Z R.:. b R.:. 1) :: R.DIM2) ar2
     ar4 = R.backpermute ((R.Z R.:. b R.:. 1) :: R.DIM2) flip ar3
     flip (R.Z R.:. x R.:. y) = (R.Z R.:. (b-1-x) R.:. y)
@@ -127,11 +128,11 @@ nistTrainBucketedIO d =
     do
       let z = 60000 :: Int
       lz <- BL.readFile "./train-labels-idx1-ubyte.gz"
-      let l = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int
+      let l = (R.copyS $ R.map fromIntegral $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int16
       pz <- BL.readFile "./train-images-idx3-ubyte.gz"
-      let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (28*28)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int
-      let r = R.map (\x -> x * d `div` 256) p
-      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int
+      let p = (R.copyS $ R.map fromIntegral $ fromByteString ((R.Z R.:. z R.:. (28*28)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int16
+      let r = R.map (\x -> x * (fromIntegral d) `div` 256) p
+      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int16
       let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0 .. (toInteger (d-1))]]) | x <- [1..28], y <- [1..28]]
       let vv = qqll (uvars uu)
       let svv = (UV.fromList $ [10] ++ replicate (28*28) d) :: VShape
@@ -146,12 +147,12 @@ nistTrainBucketedRectangleRandomIO d bx by s =
       let a = 28 :: Int
       let z = 60000 :: Int
       lz <- BL.readFile "./train-labels-idx1-ubyte.gz"
-      let l = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int
+      let l = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int16
       pz <- BL.readFile "./train-images-idx3-ubyte.gz"
-      let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (a*a)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int
+      let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (a*a)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int16
       let vr = UV.fromListN z $ zip (randomRs (0,a-bx) (mkStdGen s) :: [Int]) (randomRs (0,a-by) (mkStdGen (s+1234567)) :: [Int])
-      let r = R.reshape ((R.Z R.:. z R.:. (bx*by)) :: R.DIM2)  $ R.backpermute ((R.Z R.:. z R.:. bx R.:. by) :: R.DIM3) ((\(R.Z R.:. zi R.:. x R.:. y) -> let (x1,y1) = vr UV.! zi in (R.Z R.:. zi R.:. x1+x R.:. y1+y)) :: R.DIM3 -> R.DIM3) $ R.reshape ((R.Z R.:. z R.:. a R.:. a) :: R.DIM3) $ R.map (\x -> x * d `div` 256) p
-      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int
+      let r = R.reshape ((R.Z R.:. z R.:. (bx*by)) :: R.DIM2)  $ R.backpermute ((R.Z R.:. z R.:. bx R.:. by) :: R.DIM3) ((\(R.Z R.:. zi R.:. x R.:. y) -> let (x1,y1) = vr UV.! zi in (R.Z R.:. zi R.:. x1+x R.:. y1+y)) :: R.DIM3 -> R.DIM3) $ R.reshape ((R.Z R.:. z R.:. a R.:. a) :: R.DIM3) $ R.map (\x -> x * (fromIntegral d) `div` 256) p
+      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int16
       let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0 .. (toInteger (d-1))]]) | x <- [1..toInteger bx], y <- [1..toInteger by]]
       let vv = qqll (uvars uu)
       let svv = (UV.fromList $ [10] ++ replicate (bx*by) d) :: VShape
@@ -166,11 +167,11 @@ nistTestBucketedIO d =
     do
       let z = 10000 :: Int
       lz <- BL.readFile "./t10k-labels-idx1-ubyte.gz"
-      let l = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int
+      let l = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int16
       pz <- BL.readFile "./t10k-images-idx3-ubyte.gz"
-      let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (28*28)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int
-      let r = R.map (\x -> x * d `div` 256) p
-      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int
+      let p = (R.copyS $ R.map (fromInteger . toInteger) $ fromByteString ((R.Z R.:. z R.:. (28*28)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int16
+      let r = R.map (\x -> x * (fromIntegral d) `div` 256) p
+      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int16
       let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0 .. (toInteger (d-1))]]) | x <- [1..28], y <- [1..28]]
       let vv = qqll (uvars uu)
       let svv = (UV.fromList $ [10] ++ replicate (28*28) d) :: VShape
