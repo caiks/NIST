@@ -43,12 +43,12 @@ import AlignmentPracticableIORepa
 import AlignmentDevRepa hiding (aahr, tframe)
 import NISTDev hiding (decomperIO)
 
-refr1 k (VarPair (VarPair (VarInt f, l), i)) = VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), VarInt 0), l), i)
+refr1 k (VarPair (VarPair (VarInt f, l), VarInt i)) = VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), VarInt 0), l), VarInt i)
+refr1 k (VarPair (VarPair (VarPair (VarInt f, g), l), VarInt i)) = VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), g), l), VarInt i)
 refr1 _ v = v
 
-refr2 x y (VarPair (VarInt i,VarInt j)) = VarPair (VarInt ((x-1)+i),VarInt ((y-1)+j))
-refr2 x y (VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), VarInt g), l), i)) = (VarPair (VarPair (VarPair (VarPair (VarPair (VarStr ("(" ++ show x ++ ";" ++ show y ++ ")"),VarInt k), VarInt f), VarInt g), l), i))
-refr2 _ _ v = v
+refr2 x y (VarPair (VarInt i, VarInt j)) = VarPair (VarInt ((x-1)+i), VarInt ((y-1)+j))
+refr2 x y v = VarPair (v, VarStr ("(" ++ show x ++ ";" ++ show y ++ ")"))
 
 tframe f tt = fromJust $ transformsMapVarsFrame tt (Map.fromList $ map (\v -> (v, f v)) $ Set.toList $ tvars tt)
 
@@ -65,6 +65,8 @@ dfnul uu df g = fromJust $ systemsDecompFudsNullablePracticable uu df g
 decompercondrr vvl uu aa kmax omax fmax = fromJust $ parametersSystemsHistoryRepasDecomperConditionalFmaxRepa kmax omax fmax uu vvl aa
 
 decomperIO uu ff aa wmax lmax xmax omax bmax mmax umax pmax fmax mult seed = parametersSystemsHistoryRepasDecomperLevelMaxRollByMExcludedSelfHighestFmaxIORepa wmax lmax xmax omax bmax mmax umax pmax fmax mult seed uu (Tree $ Map.singleton (wmax,Set.empty,ff) emptyTree) aa
+
+qqhr uu vv qq = aahr uu (single (llss ([(v, ValInt 1) | v <- qqll qq] ++ [(v, ValInt 0) | v <- qqll (vv `minus` qq)])) 1)
 
 main :: IO ()
 main = 
@@ -126,8 +128,13 @@ main =
     hFlush stdout
 
     let pp = qqll $ treesPaths $ hrmult uu2 df2 hr'
+
     bmwrite (model ++ ".bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (28+2) ((28+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\(_,hrs) -> bmborder 1 (hrbm 28 1 2 (hrs `hrhrred` vvk)))) $ pp
     printf "bitmap %s\n" $ model ++ ".bmp"
+    hFlush stdout
+
+    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((28*2)+2) (((28*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 28 2 2 (hrs `hrhrred` vvk)) 0 0 (hrbm 28 2 2 (qqhr uu vvk (fund ff)))))) $ pp
+    printf "bitmap %s\n" $ model ++ "_2.bmp"
     hFlush stdout
 
     printf "<<< done\n"

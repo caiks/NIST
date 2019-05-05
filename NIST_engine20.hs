@@ -43,12 +43,12 @@ import AlignmentPracticableIORepa
 import AlignmentDevRepa hiding (aahr, tframe)
 import NISTDev hiding (decomperIO)
 
-refr1 k (VarPair (VarPair (VarInt f, l), i)) = VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), VarInt 0), l), i)
+refr1 k (VarPair (VarPair (VarInt f, l), VarInt i)) = VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), VarInt 0), l), VarInt i)
+refr1 k (VarPair (VarPair (VarPair (VarInt f, g), l), VarInt i)) = VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), g), l), VarInt i)
 refr1 _ v = v
 
-refr2 x y (VarPair (VarInt i,VarInt j)) = VarPair (VarInt ((x-1)+i),VarInt ((y-1)+j))
-refr2 x y (VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), VarInt g), l), i)) = (VarPair (VarPair (VarPair (VarPair (VarPair (VarStr ("(" ++ show x ++ ";" ++ show y ++ ")"),VarInt k), VarInt f), VarInt g), l), i))
-refr2 _ _ v = v
+refr2 x y (VarPair (VarInt i, VarInt j)) = VarPair (VarInt ((x-1)+i), VarInt ((y-1)+j))
+refr2 x y v = VarPair (v, VarStr ("(" ++ show x ++ ";" ++ show y ++ ")"))
 
 tframe f tt = fromJust $ transformsMapVarsFrame tt (Map.fromList $ map (\v -> (v, f v)) $ Set.toList $ tvars tt)
 
