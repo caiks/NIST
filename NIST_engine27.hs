@@ -100,7 +100,7 @@ main =
     let ff2 = fframe (refr1 2) $ dfnul uu2 (dfred uu2 df2 hr) 1
 
 
-    let gg1 = foldl funion fudEmpty $ [fframe (refr2 x y) ff1 | x <- [2,6,10,14,18], y <- [2,6,10,14,18]] ++  [fframe (refr2 x y) ff2 | x <- [1,7,14], y <- [1,7,14]]
+    let gg1 = foldl funion fudEmpty $ [fframe (refr2 x y) ff1 | x <- [3,7,11,15], y <- [3,7,11,15]] ++  [fframe (refr2 x y) ff2 | x <- [1,7,14], y <- [1,7,14]]
 
     printf "underlying level cardinality: %d\n" $ card $ fvars gg1
     hFlush stdout
