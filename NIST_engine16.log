@@ -1,0 +1,34 @@
+>>>
+selected regions train size: 17408
+selected train size: 60000
+underlying level cardinality: 8325
+underlying level sys cardinality: 8399
+underlying level size: 60000
+>>> NIST_model16
+<<< done NIST_model16
+model cardinality: 2436
+selected train size: 7500
+bitmap NIST_model16.bmp
+<<< done
+1,049,127,198,696 bytes allocated in the heap
+  90,234,386,552 bytes copied during GC
+   5,315,433,080 bytes maximum residency (58 sample(s))
+     853,761,312 bytes maximum slop
+           12728 MB total memory in use (2230 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     1811818 colls,     0 par   107.720s  107.459s     0.0001s    0.0010s
+  Gen  1        58 colls,     0 par    8.216s   8.218s     0.1417s    2.3488s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  897.023s  (897.316s elapsed)
+  GC      time  115.936s  (115.677s elapsed)
+  EXIT    time    0.187s  (  0.187s elapsed)
+  Total   time  1013.150s  (1013.180s elapsed)
+
+  %GC     time      11.4%  (11.4% elapsed)
+
+  Alloc rate    1,169,565,440 bytes per MUT second
+
+  Productivity  88.6% of total user, 88.6% of total elapsed
+

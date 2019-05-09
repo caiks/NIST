@@ -1,0 +1,32 @@
+>>>
+selected train size: 60000
+underlying level cardinality: 12433
+underlying level sys cardinality: 12439
+underlying level size: 60000
+>>> NIST_model15
+<<< done NIST_model15
+model cardinality: 2140
+selected train size: 7500
+NIST_engine15.exe: Data.Array.Repa.Operators.IndexSpace.reshape: reshaped array will not match size of the original
+1,117,045,161,688 bytes allocated in the heap
+ 114,235,801,368 bytes copied during GC
+   6,634,655,616 bytes maximum residency (48 sample(s))
+     677,325,888 bytes maximum slop
+           17402 MB total memory in use (3965 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     1939489 colls,     0 par   117.898s  117.815s     0.0001s    0.0014s
+  Gen  1        48 colls,     0 par   31.386s  31.389s     0.6539s    3.4193s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  1065.240s  (1065.341s elapsed)
+  GC      time  149.284s  (149.204s elapsed)
+  EXIT    time    0.199s  (  0.200s elapsed)
+  Total   time  1214.728s  (1214.745s elapsed)
+
+  %GC     time      12.3%  (12.3% elapsed)
+
+  Alloc rate    1,048,632,054 bytes per MUT second
+
+  Productivity  87.7% of total user, 87.7% of total elapsed
+

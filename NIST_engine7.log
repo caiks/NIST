@@ -1,0 +1,34 @@
+>>>
+train size: 60000
+level 1 sys cardinality: 5206
+level 1 size: 60000
+>>> NIST_model7
+<<< done NIST_model7
+model cardinality: 381
+selected train size: 7500
+alignment: 0.00
+alignment density: 0.00
+bitmap NIST_model7.bmp
+<<< done
+1,458,927,138,264 bytes allocated in the heap
+ 302,104,532,336 bytes copied during GC
+  11,989,585,088 bytes maximum residency (78 sample(s))
+     223,139,488 bytes maximum slop
+           22043 MB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     2500705 colls,     0 par   380.660s  381.030s     0.0002s    0.0010s
+  Gen  1        78 colls,     0 par   23.810s  23.815s     0.3053s    5.6267s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  861.835s  (861.497s elapsed)
+  GC      time  404.470s  (404.844s elapsed)
+  EXIT    time    5.623s  (  5.627s elapsed)
+  Total   time  1271.932s  (1271.968s elapsed)
+
+  %GC     time      31.8%  (31.8% elapsed)
+
+  Alloc rate    1,692,815,332 bytes per MUT second
+
+  Productivity  68.2% of total user, 68.2% of total elapsed
+

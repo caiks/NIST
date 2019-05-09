@@ -1,0 +1,33 @@
+>>>
+selected train size: 30000
+underlying level cardinality: 12433
+underlying level sys cardinality: 12439
+underlying level size: 30000
+>>> NIST_model12
+<<< done NIST_model12
+model cardinality: 769
+selected train size: 7500
+bitmap NIST_model12.bmp
+<<< done
+ 367,641,697,536 bytes allocated in the heap
+  45,806,857,256 bytes copied during GC
+   3,869,615,648 bytes maximum residency (30 sample(s))
+     258,050,104 bytes maximum slop
+           10038 MB total memory in use (1904 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     613629 colls,     0 par   35.395s  35.334s     0.0001s    0.0008s
+  Gen  1        30 colls,     0 par   16.595s  16.597s     0.5532s    1.8569s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  345.397s  (345.463s elapsed)
+  GC      time   51.990s  ( 51.930s elapsed)
+  EXIT    time    0.274s  (  0.274s elapsed)
+  Total   time  397.665s  (397.668s elapsed)
+
+  %GC     time      13.1%  (13.1% elapsed)
+
+  Alloc rate    1,064,403,350 bytes per MUT second
+
+  Productivity  86.9% of total user, 86.9% of total elapsed
+

@@ -21,7 +21,6 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 *~
-*.log
 *.exe
 *.gz
 20*
