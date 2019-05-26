@@ -123,6 +123,25 @@ decomperIO uu vv hh wmax lmax xmax omax bmax mmax umax pmax fmax mult seed =
       parametersSystemsHistoryRepasDecomperMaxRollByMExcludedSelfHighestFmaxIORepa 
         wmax lmax xmax omax bmax mmax umax pmax fmax mult seed uu vv hh
 
+qqhr d uu vv qq = aahr uu (single (llss ([(v, ValInt (d-1)) | v <- qqll qq] ++ [(v, ValInt 0) | v <- qqll (vv `minus` qq)])) 1)
+
+nistTrainBucketedAveragedIO :: Int -> Int -> Int -> IO (System, HistoryRepa)
+nistTrainBucketedAveragedIO d b q = 
+    do
+      let z = 60000 :: Int
+      lz <- BL.readFile "./train-labels-idx1-ubyte.gz"
+      let l = (R.copyS $ R.map fromIntegral $ fromByteString ((R.Z R.:. z R.:. 1) :: R.DIM2) $ BL.toStrict $ BL.drop 8 $ GZip.decompress lz) :: R.Array R.U R.DIM2 Int16
+      pz <- BL.readFile "./train-images-idx3-ubyte.gz"
+      let p = (R.copyS $ R.map fromIntegral $ fromByteString ((R.Z R.:. z R.:. (28*28)) :: R.DIM2) $ BL.toStrict $ BL.drop 16 $ GZip.decompress pz) :: R.Array R.U R.DIM2 Int16
+      let c = 28 `div` b
+      let r = R.reshape ((R.Z R.:. z R.:. (b*b)) :: R.DIM2) $ R.map (\x -> x * (fromIntegral d) `div` fromIntegral (c*c*256)) $ R.sumS $ R.backpermute ((R.Z R.:. z R.:. b R.:. b R.:. (c*c)) :: R.DIM4) ((\(R.Z R.:. u R.:. x1 R.:. x2 R.:. x3) -> (R.Z R.:. u R.:. x1*c+q+(x3`div`c) R.:. x2*c+q+(x3`mod`c))) :: R.DIM4 -> R.DIM3) $ R.reshape ((R.Z R.:. z R.:. 28 R.:. 28) :: R.DIM3) p
+      let h = (R.computeS $ l R.++ r) :: R.Array R.U R.DIM2 Int16
+      let uu = lluu $ [(VarStr "digit", [ValInt i | i <- [0..9]])] ++ [( VarPair (VarInt x, VarInt y), [ValInt i | i <- [0 .. (toInteger (d-1))]]) | x <- [1 .. fromIntegral b], y <- [1 .. fromIntegral b]]
+      let vv = qqll (uvars uu)
+      let svv = (UV.fromList $ [10] ++ replicate (b*b) d) :: VShape
+      let hr = HistoryRepa (V.fromListN (b*b+1) vv) (Map.fromList (zip vv [0..])) svv $ R.computeS $ R.transpose h
+      return (uu,hr)
+
 nistTrainBucketedIO :: Int -> IO (System, HistoryRepa)
 nistTrainBucketedIO d = 
     do
