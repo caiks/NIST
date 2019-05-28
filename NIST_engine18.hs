@@ -72,7 +72,12 @@ main =
     printf "model cardinality: %d\n" $ (Set.size $ fvars $ dfff df1)
     hFlush stdout
 
-    let (a,ad) = summation mult seed uu1 df1 hr
+    let hr' = hrev [i | i <- [0.. hrsize hr - 1], i `mod` 8 == 0] hr
+
+    printf "selected train size: %d\n" $ hrsize hr'
+    hFlush stdout
+
+    let (a,ad) = summation mult seed uu1 df1 hr'
     printf "alignment: %.2f\n" $ a
     printf "alignment density: %.2f\n" $ ad
 
@@ -99,7 +104,12 @@ main =
     printf "model cardinality: %d\n" $ (Set.size $ fvars $ dfff df1)
     hFlush stdout
 
-    let (a,ad) = summation mult seed uu1 df1 hr
+    let hr' = hrev [i | i <- [0.. hrsize hr - 1], i `mod` 8 == 0] hr
+
+    printf "selected train size: %d\n" $ hrsize hr'
+    hFlush stdout
+
+    let (a,ad) = summation mult seed uu1 df1 hr'
     printf "alignment: %.2f\n" $ a
     printf "alignment density: %.2f\n" $ ad
 

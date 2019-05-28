@@ -66,8 +66,6 @@ decompercondrr vvl uu aa kmax omax fmax = fromJust $ parametersSystemsHistoryRep
 
 decomperIO uu ff aa wmax lmax xmax omax bmax mmax umax pmax fmax mult seed = parametersSystemsHistoryRepasDecomperLevelMaxRollByMExcludedSelfHighestFmaxIORepa wmax lmax xmax omax bmax mmax umax pmax fmax mult seed uu (Tree $ Map.singleton (wmax,Set.empty,ff) emptyTree) aa
 
-qqhr uu vv qq = aahr uu (single (llss ([(v, ValInt 1) | v <- qqll qq] ++ [(v, ValInt 0) | v <- qqll (vv `minus` qq)])) 1)
-
 main :: IO ()
 main = 
   do
@@ -107,7 +105,7 @@ main =
     hFlush stdout
 
     let model = "NIST_model25"
-    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^9, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
+    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^10, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
 
     printf ">>> %s\n" $ model
     Just (uu2,df2) <- decomperIO uu1 gg1 hr wmax lmax xmax omax bmax mmax umax pmax fmax mult seed
@@ -133,7 +131,7 @@ main =
     printf "bitmap %s\n" $ model ++ ".bmp"
     hFlush stdout
 
-    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((28*2)+2) (((28*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 28 2 2 (hrs `hrhrred` vvk)) 0 0 (hrbm 28 2 2 (qqhr uu vvk (fund ff)))))) $ pp
+    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((28*2)+2) (((28*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 28 2 2 (hrs `hrhrred` vvk)) 0 0 (hrbm 28 2 2 (qqhr 2 uu vvk (fund ff)))))) $ pp
     printf "bitmap %s\n" $ model ++ "_2.bmp"
     hFlush stdout
 
