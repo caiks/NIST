@@ -60,7 +60,7 @@ main =
     let vvk = vv `minus` vvl
 
     let model = "NIST_model18_cols"
-    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^9, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
+    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^10, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
 
     printf ">>> %s\n" $ model
     hFlush stdout
@@ -87,7 +87,7 @@ main =
     let vvk = vv `minus` vvl
 
     let model = "NIST_model18_rows"
-    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^9, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
+    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^10, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
 
     printf ">>> %s\n" $ model
     hFlush stdout

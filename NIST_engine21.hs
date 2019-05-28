@@ -60,7 +60,7 @@ main =
     let vvk = vv `minus` vvl
 
     let model = "NIST_model21"
-    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^9, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
+    let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^11, 8, 2^10, 30, (30*3), 3, 2^8, 1, 127, 1, 5)
 
     printf ">>> %s\n" $ model
     Just (uu1,df1) <- decomperIO uu vvk hr wmax lmax xmax omax bmax mmax umax pmax fmax mult seed
@@ -69,7 +69,6 @@ main =
     hFlush stdout
 
     printf "model cardinality: %d\n" $ (Set.size $ fvars $ dfff df1)
-    hFlush stdout
 
     let hr' = hrev [i | i <- [0.. hrsize hr - 1], i `mod` 8 == 0] hr
 
@@ -82,8 +81,13 @@ main =
     hFlush stdout
 
     let pp = qqll $ treesPaths $ hrmult uu1 df1 hr'
-    bmwrite (model ++ ".bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (15+2) ((15+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\(_,hrs) -> bmborder 1 (hrbm 15 1 2 (hrs `hrhrred` vvk)))) $ pp
+
+    bmwrite (model ++ ".bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((15*2)+2) (((15*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\(_,hrs) -> bmborder 1 (hrbm 15 2 2 (hrs `hrhrred` vvk)))) $ pp
     printf "bitmap %s\n" $ model ++ ".bmp"
+    hFlush stdout
+
+    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (((15*2)*2)+2) ((((15*2)*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 15 (2*2) 2 (hrs `hrhrred` vvk)) 0 0 (hrbm 15 (2*2) 2 (qqhr 2 uu vvk (fund ff)))))) $ pp
+    printf "bitmap %s\n" $ model ++ "_2.bmp"
     hFlush stdout
 
     printf "<<< done\n"
