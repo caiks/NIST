@@ -86,7 +86,11 @@ main =
     printf "bitmap %s\n" $ model ++ ".bmp"
     hFlush stdout
 
-    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (((15*2)*2)+2) ((((15*2)*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 15 (2*2) 2 (hrs `hrhrred` vvk)) 0 0 (hrbm 15 (2*2) 2 (qqhr 2 uu vvk (fund ff)))))) $ pp
+    bmwrite (model ++ "_1.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (((15*2)*1)+2) ((((15*2)*1)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 15 2 2 (hrs `hrhrred` vvk)) 0 0 (hrbm 15 2 2 (qqhr 2 uu vvk (fund ff)))))) $ pp
+    printf "bitmap %s\n" $ model ++ "_1.bmp"
+    hFlush stdout
+
+    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (((15*3)*1)+2) ((((15*3)*1)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 15 (3*1) 2 (hrs `hrhrred` vvk)) 0 0 (hrbm 15 (3*1) 2 (qqhr 2 uu vvk (fund ff)))))) $ pp
     printf "bitmap %s\n" $ model ++ "_2.bmp"
     hFlush stdout
 
