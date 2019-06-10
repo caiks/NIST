@@ -30,7 +30,7 @@ wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
 
 The *practicable model induction* is described [here](https://greenlake.co.uk/pages/dataset_NIST_model3).
 
-`NIST_engine3` runs on a Ubuntu 16.04 Pentium CPU G2030 @ 3.00GHz using 1883 MB total memory and takes 6454 seconds,
+`NIST_engine3` Ubuntu 16.04 Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz using 1756 MB memory in 11505 seconds,
 
 ```
 cd ../Alignment
@@ -98,7 +98,7 @@ let (wmax,lmax,xmax,omax,bmax,mmax,umax,pmax,fmax,mult,seed) = (2^10, 8, 2^10, 1
 Just (uu1,df) <- decomperIO uu vvk hr wmax lmax xmax omax bmax mmax umax pmax fmax mult seed
 
 summation mult seed uu1 df hr
-(145211.97758613623,72018.94728089121)
+(148378.04791361679,74189.02395680839)
 
 BL.writeFile ("NIST_model1.json") $ decompFudsPersistentsEncode $ decompFudsPersistent df
 
