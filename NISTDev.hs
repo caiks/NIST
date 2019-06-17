@@ -66,6 +66,15 @@ bmmax bm2 ox oy bm1 = bm
         then max (f1 (R.Z R.:. x R.:. y)) (f2 (R.Z R.:. (x-ox) R.:. (y-oy))) 
         else (f1 (R.Z R.:. x R.:. y))
 
+bmmin bm2 ox oy bm1 = bm
+  where
+    bm = R.traverse2 bm2 bm1 (\_ _ -> R.extent bm2) ins
+    (R.Z R.:. sx R.:. sy) = R.extent bm1
+    ins f1 f2 (R.Z R.:. x R.:. y) = 
+      if (x>=ox && x<ox+sx && y>=oy && y<oy+sy) 
+        then min (f1 (R.Z R.:. x R.:. y)) (f2 (R.Z R.:. (x-ox) R.:. (y-oy))) 
+        else (f1 (R.Z R.:. x R.:. y))
+
 bmborder b bm = bminsert (bmfull (b*2+sx) (b*2+sy)) b b bm
   where
     (R.Z R.:. sx R.:. sy) = R.extent bm
