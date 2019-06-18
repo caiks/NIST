@@ -88,7 +88,7 @@ main =
 
     let uu1 = uu `uunion` (fsys (dfff df1))
 
-    let ff1 = fframe (refr1 3) $ dfnul uu1 (dfred uu1 df1 hr) 3
+    let ff1 = fframe (refr1 3) $ dfnul uu1 df1 3
 
     printf "model cardinality: %d\n" $ card $ fvars $ dfff df1
     hFlush stdout
@@ -98,7 +98,7 @@ main =
     printf "underlying level sys cardinality: %d\n" $ card $ uvars uu1
     hFlush stdout
 
-    let hr1 = hrfmul uu1 ff1 hr `hrhrred` (fder ff1 `union` vvl)
+    let hr1 = hrfmul uu1 ff1 hr
 
     printf "underlying level size: %d\n" $ hrsize hr1
     hFlush stdout

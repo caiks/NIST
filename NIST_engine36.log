@@ -1,0 +1,40 @@
+>>>
+model in: NIST_model2
+model out: NIST_model36
+kmax: 1
+omax: 5
+fmax: 15
+train size: 60000
+model cardinality: 542
+underlying level sys cardinality: 1349
+underlying level size: 60000
+>>> NIST_model36
+<<< done NIST_model36
+model cardinality: 206
+selected train size: 7500
+bitmap NIST_model36.bmp
+bitmap NIST_model36_1.bmp
+bitmap NIST_model36_2.bmp
+<<< done
+ 241,528,947,120 bytes allocated in the heap
+  54,523,438,960 bytes copied during GC
+     897,016,552 bytes maximum residency (99 sample(s))
+      50,970,992 bytes maximum slop
+            1754 MB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     419937 colls,     0 par   45.608s  45.599s     0.0001s    0.0017s
+  Gen  1        99 colls,     0 par    2.198s   2.198s     0.0222s    0.0658s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  123.547s  (123.564s elapsed)
+  GC      time   47.806s  ( 47.796s elapsed)
+  EXIT    time    0.007s  (  0.007s elapsed)
+  Total   time  171.362s  (171.368s elapsed)
+
+  %GC     time      27.9%  (27.9% elapsed)
+
+  Alloc rate    1,954,956,145 bytes per MUT second
+
+  Productivity  72.1% of total user, 72.1% of total elapsed
+
