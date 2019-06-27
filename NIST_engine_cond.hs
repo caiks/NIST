@@ -64,9 +64,10 @@ main =
     printf ">>>\n"
     hFlush stdout
  
-    [modelin,kmaxs,omaxs,fmaxs,model] <- getArgs
-    let (kmax,omax,fmax) = (read kmaxs, read omaxs, read fmaxs)
+    [valency_s,modelin,kmax_s,omax_s,fmax_s,model] <- getArgs
+    let (valency,kmax,omax,fmax) = (read valency_s, read kmax_s, read omax_s, read fmax_s)
 
+    printf "valency: %d\n" $ valency
     printf "model in: %s\n" $ modelin
     printf "model out: %s\n" $ model
     printf "kmax: %d\n" $ kmax
@@ -74,7 +75,7 @@ main =
     printf "fmax: %d\n" $ fmax
     hFlush stdout
 
-    (uu,hr) <- nistTrainBucketedIO 2
+    (uu,hr) <- nistTrainBucketedIO valency
 
     printf "train size: %d\n" $ hrsize hr
     hFlush stdout
