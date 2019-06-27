@@ -22,6 +22,5 @@ cabal.project.local~
 .ghc.environment.*
 *~
 *.exe
-*.gz
 20*
 
