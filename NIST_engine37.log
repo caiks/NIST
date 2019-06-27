@@ -10,3 +10,32 @@ model cardinality: 3929
 underlying level sys cardinality: 5782
 underlying level size: 60000
 >>> NIST_model37
+<<< done NIST_model37
+model cardinality: 650
+selected train size: 7500
+bitmap NIST_model37.bmp
+bitmap NIST_model37_1.bmp
+bitmap NIST_model37_2.bmp
+<<< done
+2,952,359,239,896 bytes allocated in the heap
+1,401,798,654,248 bytes copied during GC
+   4,897,173,872 bytes maximum residency (147 sample(s))
+     173,624,856 bytes maximum slop
+            9380 MB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     5398386 colls,     0 par   2205.359s  2205.919s     0.0004s    0.0049s
+  Gen  1       147 colls,     0 par   32.610s  32.604s     0.2218s    0.3465s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  2467.396s  (2465.942s elapsed)
+  GC      time  2237.969s  (2238.523s elapsed)
+  EXIT    time    0.131s  (  0.131s elapsed)
+  Total   time  4705.497s  (4704.595s elapsed)
+
+  %GC     time      47.6%  (47.6% elapsed)
+
+  Alloc rate    1,196,548,378 bytes per MUT second
+
+  Productivity  52.4% of total user, 52.4% of total elapsed
+
