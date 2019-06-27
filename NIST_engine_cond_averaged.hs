@@ -64,10 +64,12 @@ main =
     printf ">>>\n"
     hFlush stdout
  
-    [valency_s,modelin,kmax_s,omax_s,fmax_s,model] <- getArgs
-    let (valency,kmax,omax,fmax) = (read valency_s, read kmax_s, read omax_s, read fmax_s)
+    [valency_s,breadth_s,offset_s,modelin,kmax_s,omax_s,fmax_s,model] <- getArgs
+    let (valency,breadth,offset,kmax,omax,fmax) = (read valency_s, read breadth_s, read offset_s, read kmax_s, read omax_s, read fmax_s)
 
     printf "valency: %d\n" $ valency
+    printf "breadth: %d\n" $ breadth
+    printf "offset: %d\n" $ offset
     printf "model in: %s\n" $ modelin
     printf "model out: %s\n" $ model
     printf "kmax: %d\n" $ kmax
@@ -75,7 +77,7 @@ main =
     printf "fmax: %d\n" $ fmax
     hFlush stdout
 
-    (uu,hr) <- nistTrainBucketedIO valency
+    (uu,hr) <- nistTrainBucketedAveragedIO valency breadth offset
 
     printf "train size: %d\n" $ hrsize hr
     hFlush stdout
@@ -122,15 +124,15 @@ main =
 
     let pp = qqll $ treesPaths $ hrmult uu2 df2' hr'
 
-    bmwrite (model ++ ".bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (28+2) ((28+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\(_,hrs) -> bmborder 1 (hrbm 28 1 valency (hrs `hrhrred` vvk)))) $ pp
+    bmwrite (model ++ ".bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((breadth*3)+2) (((breadth*3)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\(_,hrs) -> bmborder 1 (hrbm breadth 3 valency (hrs `hrhrred` vvk)))) $ pp
     printf "bitmap %s\n" $ model ++ ".bmp"
     hFlush stdout
 
-    bmwrite (model ++ "_1.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((28*1)+2) (((28*1)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 28 1 valency (hrs `hrhrred` vvk)) 0 0 (hrbm 28 1 valency (qqhr (toInteger valency) uu vvk (fund ff)))))) $ pp
+    bmwrite (model ++ "_1.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (((breadth*3)*1)+2) ((((breadth*3)*1)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm breadth 3 valency (hrs `hrhrred` vvk)) 0 0 (hrbm breadth 3 valency (qqhr (toInteger valency) uu vvk (fund ff)))))) $ pp
     printf "bitmap %s\n" $ model ++ "_1.bmp"
     hFlush stdout
 
-    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty ((28*2)+2) (((28*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm 28 2 valency (hrs `hrhrred` vvk)) 0 0 (hrbm 28 2 valency (qqhr (toInteger valency) uu vvk (fund ff)))))) $ pp
+    bmwrite (model ++ "_2.bmp") $ bmvstack $ map (\bm -> bminsert (bmempty (((breadth*3)*2)+2) ((((breadth*3)*2)+2)*(maximum (map length pp)))) 0 0 bm) $ map (bmhstack . map (\((_,ff),hrs) -> bmborder 1 (bmmax (hrbm breadth (3*2) valency (hrs `hrhrred` vvk)) 0 0 (hrbm breadth (3*2) valency (qqhr (toInteger valency) uu vvk (fund ff)))))) $ pp
     printf "bitmap %s\n" $ model ++ "_2.bmp"
     hFlush stdout
 

@@ -1,0 +1,12 @@
+>>>
+valency: 2
+model in: NIST_model35
+model out: NIST_model37
+kmax: 1
+omax: 5
+fmax: 127
+train size: 60000
+model cardinality: 3929
+underlying level sys cardinality: 5782
+underlying level size: 60000
+>>> NIST_model37
