@@ -1,34 +1,37 @@
 >>>
+valency: 8
+breadth: 9
+offset: 0
 model: NIST_model38
 selected train size: 7500
 model cardinality: 419
 nullable fud cardinality: 794
 nullable fud derived cardinality: 127
 nullable fud underlying cardinality: 46
-ff label ent: 2.2840938732260248
+ff label ent: 0.6267873188842659
 test size: 1000
-effective size: 1000 % 1
-matches: 119
+effective size: 990 % 1
+matches: 701
 <<< done
-   9,117,850,120 bytes allocated in the heap
-   1,198,655,080 bytes copied during GC
-     188,943,296 bytes maximum residency (24 sample(s))
-       6,298,800 bytes maximum slop
-             470 MB total memory in use (106 MB lost due to fragmentation)
+  41,764,544,840 bytes allocated in the heap
+   1,474,695,176 bytes copied during GC
+     133,778,480 bytes maximum residency (20 sample(s))
+       7,044,488 bytes maximum slop
+             374 MB total memory in use (0 MB lost due to fragmentation)
 
                                      Tot time (elapsed)  Avg pause  Max pause
-  Gen  0     16327 colls,     0 par    0.700s   0.699s     0.0000s    0.0006s
-  Gen  1        24 colls,     0 par    0.765s   0.765s     0.0319s    0.1870s
+  Gen  0     79616 colls,     0 par    1.205s   1.195s     0.0000s    0.0006s
+  Gen  1        20 colls,     0 par    0.993s   0.993s     0.0496s    0.2155s
 
   INIT    time    0.000s  (  0.000s elapsed)
-  MUT     time   19.279s  ( 19.276s elapsed)
-  GC      time    1.465s  (  1.464s elapsed)
-  EXIT    time    0.010s  (  0.010s elapsed)
-  Total   time   20.755s  ( 20.750s elapsed)
+  MUT     time  212.698s  (212.683s elapsed)
+  GC      time    2.198s  (  2.187s elapsed)
+  EXIT    time    0.009s  (  0.009s elapsed)
+  Total   time  214.906s  (214.880s elapsed)
 
-  %GC     time       7.1%  (7.1% elapsed)
+  %GC     time       1.0%  (1.0% elapsed)
 
-  Alloc rate    472,942,141 bytes per MUT second
+  Alloc rate    196,356,097 bytes per MUT second
 
-  Productivity  92.9% of total user, 93.0% of total elapsed
+  Productivity  99.0% of total user, 99.0% of total elapsed
 
