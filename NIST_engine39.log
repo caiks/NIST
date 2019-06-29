@@ -1,0 +1,41 @@
+>>>
+valency: 2
+model in: NIST_model35
+model out: NIST_model39
+kmax: 2
+omax: 5
+fmax: 127
+train size: 60000
+model cardinality: 3929
+underlying level sys cardinality: 5782
+underlying level size: 60000
+>>> NIST_model39
+<<< done NIST_model39
+model cardinality: 883
+selected train size: 7500
+bitmap NIST_model39.bmp
+bitmap NIST_model39_1.bmp
+bitmap NIST_model39_2.bmp
+<<< done
+13,589,855,584,824 bytes allocated in the heap
+8,722,909,716,336 bytes copied during GC
+   3,548,035,464 bytes maximum residency (518 sample(s))
+     182,214,616 bytes maximum slop
+            7167 MB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     25393515 colls,     0 par   12638.305s  12641.237s     0.0005s    0.0156s
+  Gen  1       518 colls,     0 par   141.536s  141.534s     0.2732s    0.5259s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  11503.213s  (11497.801s elapsed)
+  GC      time  12779.842s  (12782.771s elapsed)
+  EXIT    time    0.063s  (  0.063s elapsed)
+  Total   time  24283.118s  (24280.635s elapsed)
+
+  %GC     time      52.6%  (52.6% elapsed)
+
+  Alloc rate    1,181,396,513 bytes per MUT second
+
+  Productivity  47.4% of total user, 47.4% of total elapsed
+
