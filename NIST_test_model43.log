@@ -1,0 +1,34 @@
+>>>
+model: NIST_model43
+selected train size: 7500
+model cardinality: 2034
+nullable fud cardinality: 2410
+nullable fud derived cardinality: 127
+nullable fud underlying cardinality: 361
+ff label ent: 0.5642948913994976
+test size: 1000
+effective size: 997 % 1
+matches: 808
+<<< done
+  90,278,494,976 bytes allocated in the heap
+   7,478,844,800 bytes copied during GC
+     307,854,216 bytes maximum residency (36 sample(s))
+       7,103,448 bytes maximum slop
+             780 MB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0     171908 colls,     0 par    5.110s   5.090s     0.0000s    0.0006s
+  Gen  1        36 colls,     0 par    4.169s   4.168s     0.1158s    0.5117s
+
+  INIT    time    0.000s  (  0.000s elapsed)
+  MUT     time  239.463s  (239.440s elapsed)
+  GC      time    9.279s  (  9.258s elapsed)
+  EXIT    time    0.016s  (  0.015s elapsed)
+  Total   time  248.758s  (248.714s elapsed)
+
+  %GC     time       3.7%  (3.7% elapsed)
+
+  Alloc rate    377,003,942 bytes per MUT second
+
+  Productivity  96.3% of total user, 96.3% of total elapsed
+
