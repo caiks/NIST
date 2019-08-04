@@ -4,7 +4,7 @@ This repository contains tests of the [AlignmentRepa repository](https://github.
 
 ## Documentation
 
-There is an analysis of this dataset [here](https://greenlake.co.uk/pages/dataset_NIST), with sections (a) [predicting digit without modelling](https://greenlake.co.uk/pages/dataset_NIST#Predicting_digit_without_modelling) and (b) [induced modelling of digit](https://greenlake.co.uk/pages/dataset_NIST#Induced_modelling_of_digit). 
+There is an analysis of this dataset [here](https://greenlake.co.uk/pages/dataset_NIST). 
 
 ## Installation
 
@@ -28,7 +28,7 @@ wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
 
 ## Usage
 
-The *practicable model induction* is described [here](https://greenlake.co.uk/pages/dataset_NIST_model3).
+The *practicable model induction* is described [here](https://greenlake.co.uk/pages/dataset_NIST_model#model3).
 
 `NIST_engine3` Ubuntu 16.04 Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz using 1756 MB memory in 11505 seconds,
 
