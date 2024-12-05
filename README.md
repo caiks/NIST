@@ -8,9 +8,9 @@ There is an analysis of this dataset [here](https://greenlake.co.uk/pages/datase
 
 ## Installation
 
-The `NIST` executables require the `AlignmentRepa` module which is in the [AlignmentRepa repository](https://github.com/caiks/AlignmentRepa). See the AlignmentRepa repository for installation instructions of the Haskell compiler and libraries.
+The `NIST` executables require the `AlignmentRepa` module which is in the [AlignmentRepa repository](https://github.com/caiks/AlignmentRepa). The `AlignmentRepa` module requires the [Haskell platform](https://www.haskell.org/downloads#platform) to be installed. The project is managed using [stack](https://docs.haskellstack.org/en/stable/).
 
-Then download the zip files or use git to get the NIST repository and the underlying Alignment and AlignmentRepa repositories -
+Download the zip files or use git to get the NIST repository and the underlying Alignment and AlignmentRepa repositories -
 ```
 cd
 git clone https://github.com/caiks/Alignment.git
@@ -19,11 +19,17 @@ git clone https://github.com/caiks/NIST.git
 ```
 Then download the dataset files, for example -
 ```
-cd NIST
+cd ~/NIST
 wget http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
 wget http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
 wget http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
 wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+```
+Then build with the following -
+```
+cd ~/NIST
+stack build --ghc-options -w
+
 ```
 
 ## Usage
@@ -33,50 +39,19 @@ The *practicable model induction* is described [here](https://greenlake.co.uk/pa
 `NIST_engine3` Ubuntu 16.04 Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz using 1756 MB memory in 11505 seconds,
 
 ```
-cd ../Alignment
-rm *.o *.hi
-
-cd ../AlignmentRepa
-rm *.o *.hi
-
-gcc -fPIC -c AlignmentForeign.c -o AlignmentForeign.o -O3
-
-cd ../NIST
-rm *.o *.hi
-
-ghc -i../Alignment -i../AlignmentRepa ../AlignmentRepa/AlignmentForeign.o NIST_engine3.hs -o NIST_engine3.exe -rtsopts -O2
-
-./NIST_engine3.exe +RTS -s >NIST_engine3.log 2>&1 &
+cd ~/NIST
+stack exec NIST_engine3.exe +RTS -s >NIST_engine3.log 2>&1 &
 
 tail -f NIST_engine3.log
 
 ```
-To experiment with the dataset in the interpreter,
+To experiment with the dataset in the interpreter use `stack ghci` or `stack repl` for a run-eval-print loop (REPL) environment, 
 ```
-cd ../Alignment
-rm *.o *.hi
+cd ~/NIST
+stack ghci --ghci-options -w
 
-cd ../AlignmentRepa
-rm *.o *.hi
-
-gcc -fPIC -c AlignmentForeign.c -o AlignmentForeign.o -O3
-
-cd ../NIST
-
-ghci -i../Alignment -i../AlignmentRepa ../AlignmentRepa/AlignmentForeign.o
 ```
-
-```hs
-:set -fobject-code
-:l NISTDev
-```
-Then exit the interpreter,
-```
-rm NISTDev.o
-
-ghci -i../Alignment -i../AlignmentRepa ../AlignmentRepa/AlignmentForeign.o
-```
-
+Press return when prompted to choose the main executable. Load `NISTDev` to import the modules and define various useful abbreviated functions,
 ```hs
 :l NISTDev
 
@@ -102,5 +77,30 @@ summation mult seed uu1 df hr
 
 BL.writeFile ("NIST_model1.json") $ decompFudsPersistentsEncode $ decompFudsPersistent df
 
+```
+If you wish to use compiled code rather than interpreted you may specify the following before loading `MUSHDev` -
+```
+:set -fobject-code
+
+```
+Note that some modules may become [unresolved](https://downloads.haskell.org/~ghc/7.10.3-rc1/users_guide/ghci-obj.html), for example,
+```hs
+rp $ Set.fromList [1,2,3]
+
+<interactive>:9:1: Not in scope: ‘Set.fromList’
+```
+In this case, re-import the modules explicitly as defined in `NISTDev`, for example,
+```hs
+import qualified Data.Set as Set
+import qualified Data.Map as Map
+import Alignment
+import AlignmentRepa
+import AlignmentDevRepa hiding (aahr)
+
+rp $ Set.fromList [1,2,3]
+"{1,2,3}"
+
+rp $ fudEmpty
+"{}"
 ```
 

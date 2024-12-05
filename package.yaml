@@ -1,0 +1,121 @@
+name:                NIST
+version:             0.1.0.0
+github:              "caiks/NIST"
+license:             "MIT"
+author:              "Cliff McCartney"
+maintainer:          "caiks@greenlake.co.uk"
+copyright:           "Cliff McCartney"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/caiks/NIST#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- old-locale
+- random
+- time
+- vector
+- vector-algorithms
+- zlib 
+- cassava 
+- aeson 
+- aeson-pretty
+- repa
+- repa-io
+- bytestring
+- primitive
+- Alignment
+- AlignmentRepa
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+  
+library:
+  source-dirs: src
+  
+executables:
+  NIST_engine3.exe:
+    main:                NIST_engine3.hs
+    other-modules:       []
+    source-dirs:         apps
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is NIST_engine3
+    dependencies:
+    - NIST
+  NIST_test.exe:
+    main:                NIST_test.hs
+    other-modules:       []
+    source-dirs:         apps
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is NIST_test
+    dependencies:
+    - NIST    
+  NIST_engine_cond.exe:
+    main:                NIST_engine_cond.hs
+    other-modules:       []
+    source-dirs:         apps
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is NIST_engine_cond
+    dependencies:
+    - NIST  
+  NIST_engine_cond_averaged.exe:
+    main:                NIST_engine_cond_averaged.hs
+    other-modules:       []
+    source-dirs:         apps
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is NIST_engine_cond_averaged
+    dependencies:
+    - NIST  
+  NIST_test_averaged.exe:
+    main:                NIST_test_averaged.hs
+    other-modules:       []
+    source-dirs:         apps
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is NIST_test_averaged
+    dependencies:
+    - NIST  
+  NIST_engine_cond_regions.exe:
+    main:                NIST_engine_cond_regions.hs
+    other-modules:       []
+    source-dirs:         apps
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is NIST_engine_cond_regions
+    dependencies:
+    - NIST  
+   

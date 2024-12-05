@@ -1,0 +1,207 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.36.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           NIST
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/caiks/NIST#readme>
+homepage:       https://github.com/caiks/NIST#readme
+bug-reports:    https://github.com/caiks/NIST/issues
+author:         Cliff McCartney
+maintainer:     caiks@greenlake.co.uk
+copyright:      Cliff McCartney
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/caiks/NIST
+
+library
+  exposed-modules:
+      NISTDev
+  other-modules:
+      Paths_NIST
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      Alignment
+    , AlignmentRepa
+    , aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , containers
+    , old-locale
+    , primitive
+    , random
+    , repa
+    , repa-io
+    , time
+    , vector
+    , vector-algorithms
+    , zlib
+  default-language: Haskell2010
+
+executable NIST_engine3.exe
+  main-is: NIST_engine3.hs
+  hs-source-dirs:
+      apps
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -main-is NIST_engine3
+  build-depends:
+      Alignment
+    , AlignmentRepa
+    , NIST
+    , aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , containers
+    , old-locale
+    , primitive
+    , random
+    , repa
+    , repa-io
+    , time
+    , vector
+    , vector-algorithms
+    , zlib
+  default-language: Haskell2010
+
+executable NIST_engine_cond.exe
+  main-is: NIST_engine_cond.hs
+  hs-source-dirs:
+      apps
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -main-is NIST_engine_cond
+  build-depends:
+      Alignment
+    , AlignmentRepa
+    , NIST
+    , aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , containers
+    , old-locale
+    , primitive
+    , random
+    , repa
+    , repa-io
+    , time
+    , vector
+    , vector-algorithms
+    , zlib
+  default-language: Haskell2010
+
+executable NIST_engine_cond_averaged.exe
+  main-is: NIST_engine_cond_averaged.hs
+  hs-source-dirs:
+      apps
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -main-is NIST_engine_cond_averaged
+  build-depends:
+      Alignment
+    , AlignmentRepa
+    , NIST
+    , aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , containers
+    , old-locale
+    , primitive
+    , random
+    , repa
+    , repa-io
+    , time
+    , vector
+    , vector-algorithms
+    , zlib
+  default-language: Haskell2010
+
+executable NIST_engine_cond_regions.exe
+  main-is: NIST_engine_cond_regions.hs
+  hs-source-dirs:
+      apps
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -main-is NIST_engine_cond_regions
+  build-depends:
+      Alignment
+    , AlignmentRepa
+    , NIST
+    , aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , containers
+    , old-locale
+    , primitive
+    , random
+    , repa
+    , repa-io
+    , time
+    , vector
+    , vector-algorithms
+    , zlib
+  default-language: Haskell2010
+
+executable NIST_test.exe
+  main-is: NIST_test.hs
+  hs-source-dirs:
+      apps
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -main-is NIST_test
+  build-depends:
+      Alignment
+    , AlignmentRepa
+    , NIST
+    , aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , containers
+    , old-locale
+    , primitive
+    , random
+    , repa
+    , repa-io
+    , time
+    , vector
+    , vector-algorithms
+    , zlib
+  default-language: Haskell2010
+
+executable NIST_test_averaged.exe
+  main-is: NIST_test_averaged.hs
+  hs-source-dirs:
+      apps
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N -main-is NIST_test_averaged
+  build-depends:
+      Alignment
+    , AlignmentRepa
+    , NIST
+    , aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , containers
+    , old-locale
+    , primitive
+    , random
+    , repa
+    , repa-io
+    , time
+    , vector
+    , vector-algorithms
+    , zlib
+  default-language: Haskell2010

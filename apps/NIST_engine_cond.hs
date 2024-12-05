@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric, OverloadedStrings, BangPatterns, ScopedTypeVariables #-}
 
+module NIST_engine_cond ( main) where
 
 import Control.Monad
 import Control.Monad.ST
@@ -48,9 +49,6 @@ refr1 k (VarPair (VarPair (VarInt f, l), VarInt i)) = VarPair (VarPair (VarPair 
 refr1 k (VarPair (VarPair (VarPair (VarInt f, g), l), VarInt i)) = VarPair (VarPair (VarPair (VarPair (VarInt k, VarInt f), g), l), VarInt i)
 refr1 _ v = v
 
-refr2 x y (VarPair (VarInt i, VarInt j)) = VarPair (VarInt ((x-1)+i), VarInt ((y-1)+j))
-refr2 x y v = VarPair (v, VarStr ("(" ++ show x ++ ";" ++ show y ++ ")"))
-
 tframe f tt = fromJust $ transformsMapVarsFrame tt (Map.fromList $ map (\v -> (v, f v)) $ Set.toList $ tvars tt)
 
 fframe f ff = qqff (Set.map (\tt -> tframe f tt) (ffqq ff))
@@ -67,40 +65,15 @@ main =
     printf ">>>\n"
     hFlush stdout
  
-    [valency_s,breadth_s,seed_s,ufmax_s,locations_s,modelin,kmax_s,omax_s,fmax_s,model] <- getArgs
-    let [valency,breadth,seed] = map read [valency_s,breadth_s,seed_s] :: [Int]
-    let [ufmax,kmax,omax,fmax] = map read [ufmax_s,kmax_s,omax_s,fmax_s] :: [Integer]
-    let locations = map read $ words locations_s
+    [valency_s,modelin,kmax_s,omax_s,fmax_s,model] <- getArgs
+    let (valency,kmax,omax,fmax) = (read valency_s, read kmax_s, read omax_s, read fmax_s)
 
     printf "valency: %d\n" $ valency
-    printf "breadth: %d\n" $ breadth
-    printf "seed: %d\n" $ seed
-    printf "ufmax: %d\n" $ ufmax
-    printf "locations: %s\n" $ locations_s
     printf "model in: %s\n" $ modelin
     printf "model out: %s\n" $ model
     printf "kmax: %d\n" $ kmax
     printf "omax: %d\n" $ omax
     printf "fmax: %d\n" $ fmax
-    hFlush stdout
-
-    (uu,hr) <- nistTrainBucketedRegionRandomIO valency breadth seed
-
-    printf "region train size: %d\n" $ hrsize hr
-    hFlush stdout
-
-    df1 <- dfIO  (modelin ++ ".json")
-
-    let uu1 = uu `uunion` (fsys (dfff df1))
-
-    let ff1 = fframe (refr1 3) $ dfnul uu1 (df1 `dflt` ufmax) 3
-
-    printf "region model cardinality: %d\n" $ card $ fvars $ dfff df1
-    hFlush stdout
-
-    let uu1 = uu `uunion` (fsys ff1)
-
-    printf "region sys cardinality: %d\n" $ card $ uvars uu1
     hFlush stdout
 
     (uu,hr) <- nistTrainBucketedIO valency
@@ -113,17 +86,21 @@ main =
     let vvl = sgl digit
     let vvk = vv `minus` vvl
 
-    let gg1 = foldl funion fudEmpty [fframe (refr2 x y) ff1 | x <- locations, y <- locations] 
+    df1 <- dfIO  (modelin ++ ".json")
 
-    printf "underlying level cardinality: %d\n" $ card $ fvars gg1
+    let uu1 = uu `uunion` (fsys (dfff df1))
+
+    let ff1 = fframe (refr1 3) $ dfnul uu1 df1 3
+
+    printf "model cardinality: %d\n" $ card $ fvars $ dfff df1
     hFlush stdout
 
-    let uu1 = uu `uunion` (fsys gg1)
+    let uu1 = uu `uunion` (fsys ff1)
 
-    printf "sys cardinality: %d\n" $ card $ uvars uu1
+    printf "underlying level sys cardinality: %d\n" $ card $ uvars uu1
     hFlush stdout
 
-    let hr1 = hrfmul uu1 gg1 hr
+    let hr1 = hrfmul uu1 ff1 hr
 
     printf "underlying level size: %d\n" $ hrsize hr1
     hFlush stdout
@@ -131,7 +108,7 @@ main =
     printf ">>> %s\n" $ model
     hFlush stdout
     let (uu2,df2) = decompercondrr vvl uu1 hr1 kmax omax fmax
-    let df2' = zzdf $ funcsTreesMap (\(ss,ff) -> (ss, (ff `funion` gg1) `fdep` fder ff)) $ dfzz df2
+    let df2' = zzdf $ funcsTreesMap (\(ss,ff) -> (ss, (ff `funion` ff1) `fdep` fder ff)) $ dfzz df2
     BL.writeFile (model ++ ".json") $ decompFudsPersistentsEncode $ decompFudsPersistent df2'
     printf "<<< done %s\n" $ model
     hFlush stdout

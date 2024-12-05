@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric, OverloadedStrings, BangPatterns, ScopedTypeVariables #-}
 
+module NIST_test_averaged ( main) where
 
 import Control.Monad
 import Control.Monad.ST
